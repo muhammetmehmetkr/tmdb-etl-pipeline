@@ -1,0 +1,11 @@
+[conn]
+endpoint_url = http://rustfs:9000
+aws_access_key_id = dataops
+aws_secret_access_key = Ankara06
+bucket_name1 = tmdb-bronze
+bucket_name2 = tmdb-silver
+pg_user = train
+pg_password = Ankara06
+pg_host = postgres
+pg_port = 5432
+pg_database = traindb

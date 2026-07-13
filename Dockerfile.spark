@@ -1,0 +1,52 @@
+FROM veribilimiokulu/pyspark:3.5.3_python-3.12_java17
+USER root
+# ============================================================
+# SYSTEM PACKAGES
+# ============================================================
+RUN apt-get update && \
+    apt-get install -y \
+        openssh-server \
+        sudo \
+        sshpass \
+        git \
+        wget && \
+    rm -rf /var/lib/apt/lists/*
+
+# ============================================================
+# PYTHON PACKAGES
+# ============================================================
+RUN pip install --no-cache-dir \
+    boto3 \
+    pyarrow
+
+# ============================================================
+# POSTGRESQL JDBC DRIVER
+# ============================================================
+RUN wget -O /opt/spark/jars/postgresql-42.7.11.jar \
+    https://jdbc.postgresql.org/download/postgresql-42.7.11.jar
+
+# ============================================================
+# HADOOP AWS - S3A
+# ============================================================
+
+RUN wget -O /opt/spark/jars/hadoop-aws-3.3.4.jar \
+    https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.4/hadoop-aws-3.3.4.jar && \
+    wget -O /opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar \
+    https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.262/aws-java-sdk-bundle-1.12.262.jar
+
+# ============================================================
+# DELTA LAKE
+# ============================================================
+RUN wget -O /opt/spark/jars/delta-spark_2.12-3.3.2.jar \
+    https://repo1.maven.org/maven2/io/delta/delta-spark_2.12/3.3.2/delta-spark_2.12-3.3.2.jar && \
+    wget -O /opt/spark/jars/delta-storage-3.3.2.jar \
+    https://repo1.maven.org/maven2/io/delta/delta-storage/3.3.2/delta-storage-3.3.2.jar
+
+# ============================================================
+# SSH USER
+# ============================================================
+RUN useradd -m -s /bin/bash ssh_train && \
+    echo "ssh_train:Ankara06" | chpasswd && \
+    mkdir -p /var/run/sshd
+
+CMD ["/bin/bash", "-c", "service ssh start && tail -f /dev/null"]
