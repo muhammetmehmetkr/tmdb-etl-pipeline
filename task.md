@@ -16,9 +16,6 @@ Examples:
 
 This or similar analytics are not possible in the raw form of the data. By processing this raw data you are expected to make it easily queryable with SQL language. In this direction, the definitions and requirements related to the task you will perform are shared below.
 
-# Architecture
-![](images/architecture.png)
-
 -----
 
 # 1. Data Ingestion
